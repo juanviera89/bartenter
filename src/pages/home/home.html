@@ -1,0 +1,157 @@
+
+<ion-content padding>
+ 
+    <ion-slides centeredSlides="false">
+
+            <ion-slide>
+                <div class="page-row">
+                    <div class="column">
+                        <div class="column-head">
+                            Recibidos
+                        </div>
+                        <div class="pedido" *ngFor="let item of pedidosActuales()">
+                            <div class="trago-nombre" *ngFor="let trago of item['tragos']" >
+                                    {{trago['cant']}}x {{trago['nombre']}}
+                            </div>
+                            <div class="pedido-grid">
+                                <div class="pedido-info">
+                                    <div class="info"> N° de pedido: {{formatPedidoId(item['pedidoId'])}} </div>
+                                    <div class="info"> {{item['usuario']}} </div>
+                                </div>
+                                <div class="pedido-btn-cont">
+                                    <button ion-button  (click)="coms.setStatus(item['pedidoId'],item['estado']+1)"> {{boton(item['estado'])}}  </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="column-head">
+                            Listos
+                        </div>
+                        <div class="pedido" *ngFor="let item of pedidosListos()">
+                                <div class="trago-nombre" *ngFor="let trago of item['tragos']" >
+                                        {{trago['cant']}}x {{trago['nombre']}}
+                                </div>
+                                <div class="pedido-grid">
+                                    <div class="pedido-info">
+                                        <div class="info"> N° de pedido: {{formatPedidoId(item['pedidoId'])}} </div>
+                                        <div class="info"> {{item['usuario']}} </div>
+                                    </div>
+                                    <div class="pedido-btn-cont">
+                                        <button ion-button (click)="coms.setStatus(item['pedidoId'],item['estado']+1)"> {{boton(item['estado'])}}  </button>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </ion-slide>
+
+            <ion-slide>
+                <div class="page-row">
+                    <div class="column">
+                        <div class="column-head">
+                            Entregados
+                        </div>
+                        <div class="pedido" *ngFor="let item of pedidosEntrgados()">
+                            <div class="trago-nombre" *ngFor="let trago of item['tragos']" >
+                                    {{trago['cant']}}x {{trago['nombre']}}
+                            </div>
+                            <div class="pedido-grid">
+                                <div class="pedido-info">
+                                    <div class="info"> N° de pedido: {{formatPedidoId(item['pedidoId'])}} </div>
+                                    <div class="info"> {{item['usuario']}} </div>
+                                </div>
+                                <div class="pedido-btn-cont">
+                                    <!-- <button ion-button (click)="coms.setStatus(item['pedidoId'],item['estado']+1)"> {{boton(item['estado'])}}  </button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="column-head">
+                            Historial
+                        </div>
+                        <div class="pedido" *ngFor="let item of coms.pedidos">
+                                <div class="trago-nombre" *ngFor="let trago of item['tragos']" >
+                                        {{trago['cant']}}x {{trago['nombre']}}
+                                </div>
+                                <div class="pedido-grid">
+                                    <div class="pedido-info">
+                                        <div class="info"> N° de pedido: {{formatPedidoId(item['pedidoId'])}} </div>
+                                        <div class="info"> {{item['usuario']}} </div>
+                                    </div>
+                                    <div class="pedido-btn-cont">
+                                        <div class="estado">
+                                            {{status(item['estado'])}}
+                                        </div>
+                                            
+                                        <!-- <button ion-button (click)="coms.setStatus(item['pedidoId'],item['estado']+1)"> {{boton(item['estado'])}}  </button> -->
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </ion-slide>
+        
+    </ion-slides>
+
+   <!--  <ion-list *ngIf="seccion == 0" >
+        <ion-item *ngFor="let item of pedidosActuales()" >
+            <div flex>
+                <div flex-start> {{item['fecha'] | date : 'hh:mm'}} </div>
+                <div flex-end> {{status(item['estado'])}} </div>
+            </div>
+            <div flex>
+                <div flex-start>  {{item['usuario']}} </div>
+                <div flex-end *ngIf="item['cancelado']" > Cancelado </div>
+            </div>
+          <div>
+            <p *ngFor="let trago of item['tragos']" > {{trago['cant']}}x {{trago['nombre']}} </p>
+          </div>
+          <button (click)="coms.setStatus(item['pedidoId'],item['estado']+1)" > {{boton(item['estado'])}} </button>
+        </ion-item>
+      </ion-list>
+
+      <ion-list *ngIf="seccion == 1" >
+          <ion-item *ngFor="let item of pedidosListos()" >
+            <div flex>
+                <div flex-start> {{item['fecha'] | date : 'hh:mm'}} </div>
+                <div flex-end> {{status(item['estado'])}} </div>
+            </div>
+            <div>
+              <p *ngFor="let trago of item['tragos']" > {{trago['cant']}}x {{trago['nombre']}} </p>
+            </div>
+            <button (click)="coms.setStatus(item['pedidoId'],item['estado']+1)" > {{boton(item['estado'])}} </button>
+          </ion-item>
+        </ion-list>
+
+        <ion-list *ngIf="seccion == 2" >
+            <ion-item *ngFor="let item of coms.pedidos" >
+              <div flex>
+                  <div flex-start> {{item['fecha'] | date : 'hh:mm'}} </div>
+                  <div flex-end> {{status(item['estado'])}} </div>
+              </div>
+              <div>
+                <p *ngFor="let trago of item['tragos']" > {{trago['cant']}}x {{trago['nombre']}} </p>
+              </div>
+              <button (click)="coms.setStatus(item['pedidoId'],item['estado']+1)"  *ngIf="seccion<=1" > {{boton(item['estado'])}} </button>
+            </ion-item>
+          </ion-list> -->
+
+</ion-content>
+
+<!-- <ion-footer no-padding>
+    <ion-toolbar no-padding>
+      <div class="toolbar-container">
+          <div class="toolbar-btn" ion-button (click)="seccion = 0">
+              <ion-icon name="book"></ion-icon>
+          </div>
+          <div class="toolbar-btn" ion-button (click)="seccion = 1">
+              <ion-icon name="clock"></ion-icon>
+          </div>
+          <div class="toolbar-btn" ion-button (click)="seccion = 2">
+              <ion-icon name="contact"></ion-icon>
+          </div>
+      </div>
+    </ion-toolbar>
+  </ion-footer> -->
